@@ -92,13 +92,14 @@ SegForge/
 
 ## Citation
 
+```bibtex
 @misc{huang2025sidasocialmediaimage,
       title={SIDA: Social Media Image Deepfake Detection, Localization and Explanation with Large Multimodal Model}, 
       author={Zhenglin Huang and Jinwei Hu and Xiangtai Li and Yiwei He and Xingyu Zhao and Bei Peng and Baoyuan Wu and Xiaowei Huang and Guangliang Cheng},
       year={2025},
       booktitle={Conference on Computer Vision and Pattern Recognition}
 }
-
+```
 
 # License
 

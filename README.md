@@ -65,3 +65,20 @@ train:
   weight_decay: 0.006
 ```
 
+# Project Structure
+``` bash
+SegForge/
+├── src/
+│   ├── train.py          # Training script
+│   ├── model.py          # SAM + decoder model
+│   ├── dataset.py        # SID_Set dataset 
+|
+│   ├── trainer.py        # Training loop with metrics
+│   ├── transforms.py     # Image/mask preprocessing
+│   ├── metrics.py        # IoU, Dice, Precision/Recall
+│   └── utils.py          # Utilities & SAM checkpoint download
+├── config.yaml           # Training configuration
+├── checkpoints/          # Model checkpoints
+├── logs/                 # TensorBoard logs
+└── data/                 # Downloaded dataset 
+```

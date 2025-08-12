@@ -27,7 +27,7 @@ SegForge trains a segmentation model to detect tampered regions in images from t
 
 ```bash
 # Clone repository
-git clone <repo-url>
+git clone <https://github.com/raghulchandramouli/SegForge.git>
 cd SegForge
 
 # Create conda environment
@@ -39,10 +39,14 @@ pip install -r requirements.txt
 ```
 
 ## Train with default config
+```bash
 python -m src.train --config config.yaml
+```
 
 ## Monitor training with TensorBoard
+```bash
 tensorboard --logdir=./logs
+```
 
 ## *yaml config files*
 ```bash

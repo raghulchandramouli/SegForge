@@ -72,7 +72,6 @@ SegForge/
 │   ├── train.py          # Training script
 │   ├── model.py          # SAM + decoder model
 │   ├── dataset.py        # SID_Set dataset 
-|
 │   ├── trainer.py        # Training loop with metrics
 │   ├── transforms.py     # Image/mask preprocessing
 │   ├── metrics.py        # IoU, Dice, Precision/Recall
@@ -81,4 +80,30 @@ SegForge/
 ├── checkpoints/          # Model checkpoints
 ├── logs/                 # TensorBoard logs
 └── data/                 # Downloaded dataset 
+```
+
+### Metrics Measured
+**The model Tracks:**
+- *Loss:* Binary Cross Entropy
+- *IoU:* Intersection over Union
+- *Dice:* Dice Coefficient
+- *Precision & Recall:* Per-Pixel level
+
+
+## Citation
+
+@misc{huang2025sidasocialmediaimage,
+      title={SIDA: Social Media Image Deepfake Detection, Localization and Explanation with Large Multimodal Model}, 
+      author={Zhenglin Huang and Jinwei Hu and Xiangtai Li and Yiwei He and Xingyu Zhao and Bei Peng and Baoyuan Wu and Xiaowei Huang and Guangliang Cheng},
+      year={2025},
+      booktitle={Conference on Computer Vision and Pattern Recognition}
+}
+
+
+# License
+
+```bash
+
+This README provides a complete overview of your project with installation, usage, and technical details.
+
 ```

@@ -5,6 +5,7 @@ from datasets import load_dataset
 from PIL import Image
 import numpy as np
 from .transforms import get_image_transforms, mask_transform
+import os
 
 class SIDDataset(Dataset):
     """Regular Dataset for downloaded SID_Set with proper progress bars"""
@@ -37,8 +38,6 @@ class SIDDataset(Dataset):
             mask_tensor = torch.zeros(1, self.img_size, self.img_size)
         
         return self.image_tf(img), mask_tensor, img_id
-
-
 
 
 class HFStreamingDataset(IterableDataset):
@@ -103,3 +102,41 @@ class HFStreamingDataset(IterableDataset):
             count += 1
             if self.max_samples is not None and count >= self.max_samples:
                 break
+            
+
+class LocalInpaintingDataset(Dataset):
+    """
+    Dataset for local inpainting images.
+    Expects a directory with images and masks:
+      - images: 0.jpg, 1.jpg, ...
+      - masks: 0.jpg, 1.jpg, ...
+    """
+    def __init__(self, img_dir, mask_dir, img_size=512, train=True, train_split=0.8):
+            self.img_dir = img_dir
+            self.mask_dir = mask_dir
+            self.img_size = img_size
+            self.image_tf = get_image_transforms(img_size)
+            
+            # Get all image files
+            img_files = sorted([f for f in os.listdir(img_dir) if f.endswith(('.jpg', '.png'))])
+            
+            # Split train/val
+            split_idx = int(len(img_files) * train_split)
+            if train:
+                self.img_files = img_files[:split_idx]
+            else:
+                self.img_files = img_files[split_idx:]
+    
+    def __len__(self):
+        return len(self.img_files)
+        
+    def __getitem__(self, idx):
+        img_name = self.img_files[idx]
+        img = Image.open(os.path.join(self.img_dir, img_name)).convert('RGB')
+        
+        # Convert image filename to mask filename: 000000.jpg -> 000000.png
+        base_name = os.path.splitext(img_name)[0]  # Remove extension
+        mask_name = f"{base_name}.png"  # Add .png extension
+        mask = Image.open(os.path.join(self.mask_dir, mask_name)).convert('L')
+        
+        return self.image_tf(img), mask_transform(mask, self.img_size), img_name

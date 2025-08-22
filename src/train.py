@@ -1,22 +1,34 @@
 import argparse, yaml, torch
 from torch.utils.data import DataLoader
 from .utils import load_config, set_seed, makedirs
-from .dataset import SIDDataset
+from .dataset import SIDDataset, LocalInpaintingDataset
 from .model import SAMDecoderOnlyModel
 from .trainer import Trainer
 import os
 
 def build_loaders(cfg):
-    
-    train_ds = SIDDataset(cfg['data']['hf_repo'], split=cfg['data']['hf_split_train'],
-                         img_size=cfg['data']['img_size'], cache_dir=cfg['data'].get('hf_cache_dir', './data'))
-    val_ds = SIDDataset(cfg['data']['hf_repo'], split=cfg['data']['hf_split_val'],
-                       img_size=cfg['data']['img_size'], cache_dir=cfg['data'].get('hf_cache_dir', './data'))
+    if cfg['data']['use_hf']:
+        # Use HuggingFace SID dataset
+        train_ds = SIDDataset(cfg['data']['hf_repo'], split=cfg['data']['hf_split_train'],
+                             img_size=cfg['data']['img_size'], cache_dir=cfg['data'].get('hf_cache_dir', './data'))
+        val_ds = SIDDataset(cfg['data']['hf_repo'], split=cfg['data']['hf_split_val'],
+                           img_size=cfg['data']['img_size'], cache_dir=cfg['data'].get('hf_cache_dir', './data'))
+    else:
+        # Use local inpainting dataset
+        train_ds = LocalInpaintingDataset(
+            cfg['data']['img_dir'], cfg['data']['mask_dir'],
+            img_size=cfg['data']['img_size'], train=True, 
+            train_split=cfg['data']['train_split']
+        )
+        val_ds = LocalInpaintingDataset(
+            cfg['data']['img_dir'], cfg['data']['mask_dir'],
+            img_size=cfg['data']['img_size'], train=False,
+            train_split=cfg['data']['train_split']
+        )
     
     train_loader = DataLoader(train_ds, batch_size=cfg['train']['batch_size'], shuffle=True, num_workers=2)
     val_loader = DataLoader(val_ds, batch_size=cfg['train']['batch_size'], shuffle=False, num_workers=2)
     return train_loader, val_loader
-
 
 def main(config):
     cfg = load_config(config)

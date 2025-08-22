@@ -1,3 +1,9 @@
 checkpoints/
 dataset_download/
 logs/
+predictions_Image_dir
+predictions_Image_tile
+predictions_Inpainted
+validation_results
+*.arrow
+*.lock

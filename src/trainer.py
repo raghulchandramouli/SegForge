@@ -16,7 +16,8 @@ class Trainer:
         self.writer = SummaryWriter(cfg['logging']['tb_logdir'])
         makedirs(cfg['logging']['checkpoint_dir'])
         self.amp = cfg['train'].get('amp', True)
-        self.scaler = torch.amp.GradScaler(enabled=self.amp and device.type=='cuda')
+        self.scaler = torch.amp.GradScaler('cuda', enabled=self.amp and device.type=='cuda')
+
 
     def train_epoch(self, epoch):
         self.model.train()
@@ -30,7 +31,7 @@ class Trainer:
             imgs = imgs.to(self.device)
             masks = masks.to(self.device)
             
-            with torch.amp.autocast(enabled=self.amp and self.device.type=='cuda'):
+            with torch.amp.autocast('cuda', enabled=self.amp and self.device.type=='cuda'):
                 logits = self.model.forward_from_image(imgs)
 
             loss = torch.nn.functional.binary_cross_entropy_with_logits(logits, masks)

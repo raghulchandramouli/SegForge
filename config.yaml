@@ -10,30 +10,30 @@ model:
   decoder_channels : [256, 128, 64, 32]
 
 data:
-  use_hf: false                           # true -> stream from HF; false -> local (not used here)
-  # hf_repo: "saberzl/SID_Set"             # the HF dataset id
-  # hf_split_train: "train"
-  # hf_split_val: "validation"
-  # hf_split_test: "test"                  # change if HF uses a different name
+  use_hf: true                           # true -> stream from HF; false -> local (not used here)
+  hf_repo: "saberzl/SID_Set"             # the HF dataset id
+  hf_split_train: "train"
+  hf_split_val: "validation"
+  hf_split_test: "test"                  # change if HF uses a different name
   img_size: 1024
-  # hf_cache_dir: null
-  train_split: 0.8  
-  img_dir: "/mnt/g/Authenta/data/authenta-remaskable-inpainting-detection/balanced_images/inpainting"
-  mask_dir: "/mnt/g/Authenta/data/authenta-remaskable-inpainting-detection/balanced_images/masks"
-
-
+  hf_cache_dir: null
+  #train_split: 0.8  
+  #img_dir: "/mnt/g/Authenta/data/authenta-remaskable-inpainting-detection/balanced_images/inpainting"
+  #mask_dir: "/mnt/g/Authenta/data/authenta-remaskable-inpainting-detection/balanced_images/masks"
 
 train:
-  epochs: 10
-  batch_size: 1                  
+  epochs: 20
+  batch_size: 4
+  checkpoint_dir: ./checkpoints                  
   lr: 0.00001  
   weight_decay: 0.006
   grad_accum: 4
   amp: true
+  resume_from : "./checkpoints/finetuned/epoch_6.pth"
 
 logging:
   tb_logdir: ./logs
-  checkpoint_dir: ./checkpoints/finetuned
+  checkpoint_dir: ./checkpoints/
   save_every: 1
   example_images_every_n_epochs: 1
-  log_every_n_batches : 10
+  log_every_n_batches: 10
